@@ -27,7 +27,7 @@ public class Fib3 {
 	// Which represent our base cases
 	static Map<Integer, Integer> memo = new HashMap<>(Map.of(0, 0, 1, 1));
 
-	private static int fib3(int n) {
+	public static int fib3(int n) {
 		if (!memo.containsKey(n)) {
 			// memoization step
 			memo.put(n, fib3(n - 1) + fib3(n - 2));

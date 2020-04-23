@@ -17,7 +17,7 @@
 package chapter1;
 
 public class Fib2 {
-	private static int fib2(int n) {
+	public static int fib2(int n) {
 		if (n < 2) {
 			return n;
 		}
