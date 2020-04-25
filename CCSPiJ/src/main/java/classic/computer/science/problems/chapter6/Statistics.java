@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package chapter6;
+package classic.computer.science.problems.chapter6;
 
 import java.util.DoubleSummaryStatistics;
 import java.util.List;

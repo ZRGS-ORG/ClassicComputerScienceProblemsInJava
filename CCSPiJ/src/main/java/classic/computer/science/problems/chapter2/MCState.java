@@ -14,13 +14,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package chapter2;
+package classic.computer.science.problems.chapter2;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-
-import chapter2.GenericSearch.Node;
 
 public class MCState {
 	private static final int MAX_NUM = 3;
@@ -171,7 +169,7 @@ public class MCState {
 
 	public static void main(String[] args) {
 		MCState start = new MCState(MAX_NUM, MAX_NUM, true);
-		Node<MCState> solution = GenericSearch.bfs(start, MCState::goalTest, MCState::successors);
+		GenericSearch.Node<MCState> solution = GenericSearch.bfs(start, MCState::goalTest, MCState::successors);
 		if (solution == null) {
 			System.out.println("No solution found!");
 		} else {

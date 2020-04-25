@@ -14,7 +14,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package chapter4;
+package classic.computer.science.problems.chapter4;
 
 public class WeightedEdge extends Edge implements Comparable<WeightedEdge> {
 	public final double weight;

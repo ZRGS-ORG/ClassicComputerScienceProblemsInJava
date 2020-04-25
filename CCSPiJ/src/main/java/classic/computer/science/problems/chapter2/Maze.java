@@ -14,13 +14,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package chapter2;
+package classic.computer.science.problems.chapter2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import chapter2.GenericSearch.Node;
 
 public class Maze {
 
@@ -189,7 +187,7 @@ public class Maze {
 		Maze m = new Maze();
 		System.out.println(m);
 
-		Node<MazeLocation> solution1 = GenericSearch.dfs(m.start, m::goalTest, m::successors);
+		GenericSearch.Node<MazeLocation> solution1 = GenericSearch.dfs(m.start, m::goalTest, m::successors);
 		if (solution1 == null) {
 			System.out.println("No solution found using depth-first search!");
 		} else {
@@ -199,7 +197,7 @@ public class Maze {
 			m.clear(path1);
 		}
 
-		Node<MazeLocation> solution2 = GenericSearch.bfs(m.start, m::goalTest, m::successors);
+		GenericSearch.Node<MazeLocation> solution2 = GenericSearch.bfs(m.start, m::goalTest, m::successors);
 		if (solution2 == null) {
 			System.out.println("No solution found using breadth-first search!");
 		} else {
@@ -209,7 +207,7 @@ public class Maze {
 			m.clear(path2);
 		}
 
-		Node<MazeLocation> solution3 = GenericSearch.astar(m.start, m::goalTest, m::successors, m::manhattanDistance);
+		GenericSearch.Node<MazeLocation> solution3 = GenericSearch.astar(m.start, m::goalTest, m::successors, m::manhattanDistance);
 		if (solution3 == null) {
 			System.out.println("No solution found using A*!");
 		} else {
