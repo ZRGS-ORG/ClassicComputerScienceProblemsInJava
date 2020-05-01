@@ -1,30 +1,33 @@
-// GenericSearch.java
-// From Classic Computer Science Problems in Java Chapter 2
-// Copyright 2020 David Kopec
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/*
+ GenericSearch.java
+ From Classic Computer Science Problems in Java Chapter 2
+ Copyright 2020 David Kopec
 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 package classic.computer.science.problems.chapter2;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
@@ -84,12 +87,28 @@ public class GenericSearch {
 			Double theirs = other.cost + other.heuristic;
 			return mine.compareTo(theirs);
 		}
-	}
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Node)) return false;
+            Node<?> node = (Node<?>) o;
+            return Double.compare(node.cost, cost) == 0 &&
+                Double.compare(node.heuristic, heuristic) == 0 &&
+                state.equals(node.state) &&
+                parent.equals(node.parent);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(state, parent, cost, heuristic);
+        }
+    }
 
 	public static <T> Node<T> dfs(T initial, Predicate<T> goalTest,
 			Function<T, List<T>> successors) {
 		// frontier is where we've yet to go
-		Stack<Node<T>> frontier = new Stack<>();
+		Deque<Node<T>> frontier = new ArrayDeque<>();
 		frontier.push(new Node<>(initial, null));
 		// explored is where we've been
 		Set<T> explored = new HashSet<>();
@@ -190,5 +209,4 @@ public class GenericSearch {
 		System.out.println(GenericSearch.binaryContains(List.of("a", "d", "e", "f", "z"), "f")); // true
 		System.out.println(GenericSearch.binaryContains(List.of("john", "mark", "ronald", "sarah"), "sheila")); // false
 	}
-
 }

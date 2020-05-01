@@ -1,18 +1,20 @@
-// Maze.java
-// From Classic Computer Science Problems in Java Chapter 2
-// Copyright 2020 David Kopec
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/*
+   Maze.java
+   From Classic Computer Science Problems in Java Chapter 2
+   Copyright 2020 David Kopec
+  
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+  
+   http://www.apache.org/licenses/LICENSE-2.0
+  
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
 
 package classic.computer.science.problems.chapter2;
 
@@ -39,7 +41,7 @@ public class Maze {
 			case PATH:
 				return ("*");
 			}
-			return null; // should never get here
+			return ""; // should never get here
 		}
 	}
 
@@ -78,15 +80,14 @@ public class Maze {
 			if (column != other.column) {
 				return false;
 			}
-			if (row != other.row) {
-				return false;
-			}
-			return true;
-		}
+            return row == other.row;
+        }
 	}
 
-	private final int rows, columns;
-	private final MazeLocation start, goal;
+	private final int rows;
+    private final int columns;
+	private final MazeLocation start;
+	private final MazeLocation goal;
 	private Cell[][] grid;
 
 	public Maze(int rows, int columns, MazeLocation start, MazeLocation goal, double sparseness) {
@@ -174,7 +175,7 @@ public class Maze {
 	public double euclideanDistance(MazeLocation ml) {
 		int xdist = ml.column - goal.column;
 		int ydist = ml.row - goal.row;
-		return Math.sqrt((xdist * xdist) + (ydist * ydist));
+		return Math.sqrt(((double)xdist * xdist) + (ydist * ydist));
 	}
 
 	public double manhattanDistance(MazeLocation ml) {

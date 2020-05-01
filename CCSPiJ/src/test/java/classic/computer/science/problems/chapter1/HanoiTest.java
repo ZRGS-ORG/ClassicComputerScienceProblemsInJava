@@ -27,14 +27,19 @@ public class HanoiTest {
 
         printCurrentDisksForTheTowers(hanoi, "hanoi towerA before execution ", "hanoi towerB before execution ", "hanoi towerC before execution ");
 
-        Assertions.assertThat(hanoi.towerA).isEqualTo(HanoiTest.stack);
+        Integer[] integerArray = new Integer[] {};
+
+        Integer[] arrayFromStack = HanoiTest.stack.toArray(integerArray);
+
+        Assertions.assertThat(hanoi.towerA).containsExactly(arrayFromStack);
+//        Assertions.assertThat(hanoi.towerA).isEqualTo(HanoiTest.stack);
 
         hanoi.solve();
 
         System.out.println("");
         printCurrentDisksForTheTowers(hanoi, "hanoi towerA after execution ", "hanoi towerB after execution ", "hanoi towerC after execution ");
 
-        Assertions.assertThat(hanoi.towerC).isEqualTo(HanoiTest.stack);
+        Assertions.assertThat(hanoi.towerC).containsExactly(arrayFromStack);
     }
 
     private void printCurrentDisksForTheTowers(Hanoi hanoi, String s, String s2, String s3) {

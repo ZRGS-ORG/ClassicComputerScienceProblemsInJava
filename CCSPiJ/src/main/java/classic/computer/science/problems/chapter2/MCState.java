@@ -1,32 +1,35 @@
-// MCState.java
-// From Classic Computer Science Problems in Java Chapter 2
-// Copyright 2020 David Kopec
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/*
+  MCState.java
+  From Classic Computer Science Problems in Java Chapter 2
+  Copyright 2020 David Kopec
+ 
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+ 
+  http://www.apache.org/licenses/LICENSE-2.0
+ 
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ */
 
 package classic.computer.science.problems.chapter2;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class MCState {
 	private static final int MAX_NUM = 3;
-	final private int wm; // west bank missionaries
-	final private int wc; // west bank cannibals
-	final private int em; // east bank missionaries
-	final private int ec; // east bank cannibals
-	final private boolean boat; // is boat on west bank?
+	private final int wm; // west bank missionaries
+	private final int wc; // west bank cannibals
+	private final int em; // east bank missionaries
+	private final int ec; // east bank cannibals
+	private final boolean boat; // is boat on west bank?
 
 	public MCState(int missionaries, int cannibals, boolean boat) {
 		wm = missionaries;
@@ -55,11 +58,8 @@ public class MCState {
 		if (wm < wc && wm > 0) {
 			return false;
 		}
-		if (em < ec && em > 0) {
-			return false;
-		}
-		return true;
-	}
+        return em >= ec || em <= 0;
+    }
 
 	public static List<MCState> successors(MCState mcs) {
 		List<MCState> sucs = new ArrayList<>();
@@ -101,22 +101,18 @@ public class MCState {
 	}
 
 	public static void displaySolution(List<MCState> path) {
-		if (path.size() == 0) { // sanity check
+		if (path.isEmpty()) { // sanity check
 			return;
 		}
 		MCState oldState = path.get(0);
 		System.out.println(oldState);
 		for (MCState currentState : path.subList(1, path.size())) {
 			if (currentState.boat) {
-				System.out.printf("%d missionaries and %d cannibals moved from the east bank to the west bank." +
-						System.lineSeparator(),
-						oldState.em - currentState.em,
-						oldState.ec - currentState.ec);
+			    String message = "{1} missionaries and {2} cannibals moved from the east bank to the west bank";
+                System.out.println(MessageFormat.format(message, oldState.em - currentState.em, oldState.ec - currentState.ec));
 			} else {
-				System.out.printf("%d missionaries and %d cannibals moved from the west bank to the east bank." +
-						System.lineSeparator(),
-						oldState.wm - currentState.wm,
-						oldState.wc - currentState.wc);
+			    String message = "{1} missionaries and {2} cannibals moved from the west bank to the east bank.";
+				System.out.printf(message, oldState.wm - currentState.wm, oldState.wc - currentState.wc);
 			}
 			System.out.println(currentState);
 			oldState = currentState;
@@ -161,11 +157,8 @@ public class MCState {
 		if (wc != other.wc) {
 			return false;
 		}
-		if (wm != other.wm) {
-			return false;
-		}
-		return true;
-	}
+        return wm == other.wm;
+    }
 
 	public static void main(String[] args) {
 		MCState start = new MCState(MAX_NUM, MAX_NUM, true);

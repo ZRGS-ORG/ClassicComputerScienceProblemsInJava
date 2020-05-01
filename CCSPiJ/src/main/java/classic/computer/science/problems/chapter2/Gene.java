@@ -1,42 +1,51 @@
-// Gene.java
-// From Classic Computer Science Problems in Java Chapter 2
-// Copyright 2020 David Kopec
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/*
+ Gene.java
+ From Classic Computer Science Problems in Java Chapter 2
+ Copyright 2020 David Kopec
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 
 package classic.computer.science.problems.chapter2;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 public class Gene {
 
-	public enum Nucleotide {
+	@SuppressWarnings("unused")
+    public enum Nucleotide {
 		A, C, G, T
 	}
 
 	public static class Codon implements Comparable<Codon> {
-		public final Nucleotide first, second, third;
+		public final Nucleotide first;
+        public final Nucleotide second;
+        public final Nucleotide third;
 
-		public Codon(String codonStr) {
-			first = Enum.valueOf(Nucleotide.class, codonStr.substring(0, 1));
-			second = Enum.valueOf(Nucleotide.class, codonStr.substring(1, 2));
-			third = Enum.valueOf(Nucleotide.class, codonStr.substring(2, 3));
+		public Codon(String codonString) {
+			first = Enum.valueOf(Nucleotide.class, codonString.substring(0, 1));
+			second = Enum.valueOf(Nucleotide.class, codonString.substring(1, 2));
+			third = Enum.valueOf(Nucleotide.class, codonString.substring(2, 3));
 		}
 
 		@Override
-		public int compareTo(Codon other) {
+		public int compareTo(@NotNull Codon other) {
 			// first is compared first, then second, etc.
 			// IOW first takes precedence over second and second over third
 			return Comparator.comparing((Codon c) -> c.first)
@@ -44,14 +53,29 @@ public class Gene {
 					.thenComparing((Codon c) -> c.third)
 					.compare(this, other);
 		}
-	}
 
-	private ArrayList<Codon> codons = new ArrayList<>();
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Codon)) return false;
+            Codon codon = (Codon) o;
+            return first == codon.first &&
+                second == codon.second &&
+                third == codon.third;
+        }
 
-	public Gene(String geneStr) {
-		for (int i = 0; i < geneStr.length() - 3; i++) {
+        @Override
+        public int hashCode() {
+            return Objects.hash(first, second, third);
+        }
+    }
+
+	private final ArrayList<Codon> codons = new ArrayList<>();
+
+	public Gene(String geneString) {
+		for (int i = 0; i < geneString.length() - 3; i++) {
 			// Take every 3 characters in the String and form a Codon
-			codons.add(new Codon(geneStr.substring(i, i + 3)));
+			codons.add(new Codon(geneString.substring(i, i + 3)));
 		}
 	}
 
@@ -66,22 +90,9 @@ public class Gene {
 
 	public boolean binaryContains(Codon key) {
 		// binary search only works on sorted collections
-		ArrayList<Codon> sortedCodons = new ArrayList<>(codons);
+		List<Codon> sortedCodons = new ArrayList<>(codons);
 		Collections.sort(sortedCodons);
-		int low = 0;
-		int high = sortedCodons.size() - 1;
-		while (low <= high) { // while there is still a search space
-			int middle = (low + high) / 2;
-			int comparison = codons.get(middle).compareTo(key);
-			if (comparison < 0) { // middle codon is less than key
-				low = middle + 1;
-			} else if (comparison > 0) { // middle codon is greater than key
-				high = middle - 1;
-			} else { // middle codon is equal to key
-				return true;
-			}
-		}
-		return false;
+        return GenericSearch.binaryContains(sortedCodons, key);
 	}
 
 	public static void main(String[] args) {
@@ -93,7 +104,6 @@ public class Gene {
 		System.out.println(myGene.linearContains(gat)); // false
 		System.out.println(myGene.binaryContains(acg)); // true
 		System.out.println(myGene.binaryContains(gat)); // false
-
 	}
 
 }
